@@ -9,7 +9,7 @@ test('palindrom of a', () => {
 test('palindrom of react', () => {
   const result = palindrom('react')
 
-  expect(result).toBe('tkaer')
+  expect(result).toBe('tcaer')
 })
 
 test('palindrom of saippuakauppias', () => {
