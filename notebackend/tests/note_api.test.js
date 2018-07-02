@@ -3,6 +3,7 @@ const { app, server } = require('../index')
 const api = supertest(app)
 const Note = require('../models/note')
 
+
 const initialNotes = [
   {
     content: 'HTML on helppoa',
@@ -23,6 +24,8 @@ const initialNotes = [
   noteObject = new Note(initialNotes[1])
   await noteObject.save()
 })**/
+
+describe.skip('when there is initially some notes saved', async () => {
 
 beforeAll(async () => {
   await Note.remove({})
@@ -148,7 +151,8 @@ test('a note can be deleted', async () => {
   expect(notesAfterDelete.body.length).toBe(notesAtBeginningOfOperation.body.length - 1)
 })
 
-
 afterAll(() => {
   server.close()
+})
+
 })
