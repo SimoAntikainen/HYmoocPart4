@@ -1,14 +1,8 @@
 const notesRouter = require('express').Router()
 const Note = require('../models/note')
+const User = require('../models/user')
 
-const formatNote = (note) => {
-  return {
-    id: note._id,
-    content: note.content,
-    date: note.date,
-    important: note.important
-  }
-}
+
 
 /**notesRouter.get('/', (request, response) => {
   Note
@@ -18,8 +12,13 @@ const formatNote = (note) => {
     })
 })**/
 notesRouter.get('/', async (request, response) => {
-  const notes = await Note.find({})
-  response.json(notes.map(formatNote))
+  //const notes = await Note.find({})
+  //response.json(notes.map(Note.format))
+  const notes = await Note
+    .find({})
+    .populate('user', { username: 1, name: 1 } )
+
+  response.json(notes.map(Note.format))
 })
 
 
@@ -55,7 +54,7 @@ notesRouter.get('/:id', async (request, response) => {
     const note = await Note.findById(request.params.id)
 
     if (note) {
-      response.json(formatNote(note))
+      response.json(Note.format(note))
     } else {
       response.status(404).end()
     }
@@ -112,15 +111,22 @@ notesRouter.post('/', async (request, response) => {
       return response.status(400).json({ error: 'content missing' })
     }
 
+    const user = await User.findById(body.userId)
+
     const note = new Note({
       content: body.content,
       important: body.important === undefined ? false : body.important,
-      date: new Date()
+      date: new Date(),
+      user: user._id
     })
 
     const savedNote = await note.save()
-    response.json(formatNote(note))
-  } catch (exception) {
+
+    user.notes = user.notes.concat(savedNote._id)
+    await user.save()
+
+    response.json(Note.format(note))
+  } catch(exception) {
     console.log(exception)
     response.status(500).json({ error: 'something went wrong...' })
   }
@@ -138,7 +144,7 @@ notesRouter.put('/:id', (request, response) => {
   Note
     .findByIdAndUpdate(request.params.id, note, { new: true })
     .then(updatedNote => {
-      response.json(formatNote(updatedNote))
+      response.json(Note.format(updatedNote))
     })
     .catch(error => {
       console.log(error)
