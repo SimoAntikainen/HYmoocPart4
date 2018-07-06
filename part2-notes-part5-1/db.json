@@ -1,0 +1,46 @@
+{
+  "notes": [
+    {
+      "id": 1,
+      "content": "HTML on helppoa",
+      "date": "2017-12-10T17:30:31.098Z",
+      "important": true
+    },
+    {
+      "id": 2,
+      "content": "Selain pystyy suorittamaan vain javascriptiä",
+      "date": "2017-12-10T18:39:34.091Z",
+      "important": false
+    },
+    {
+      "id": 3,
+      "content": "HTTP-protokollan tärkeimmät metodit ovat GET ja POST",
+      "date": "2017-12-10T19:20:14.298Z",
+      "important": true
+    },
+    {
+      "content": "REST-apissa uuden resurssin luominen tapahtuu HTTP POST -pyynnöllä",
+      "date": "2018-01-17T08:48:54.930Z",
+      "important": false,
+      "id": 4
+    },
+    {
+      "content": "uusi toimii",
+      "date": "2018-01-17T08:50:52.093Z",
+      "important": true,
+      "id": 5
+    },
+    {
+      "content": "worx stil",
+      "date": "2018-01-17T10:59:56.367Z",
+      "important": true,
+      "id": 6
+    },
+    {
+      "content": "uusi",
+      "date": "2018-01-17T12:13:11.787Z",
+      "important": true,
+      "id": 7
+    }
+  ]
+}
