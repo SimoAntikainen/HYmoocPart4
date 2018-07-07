@@ -24,6 +24,13 @@ class App extends React.Component {
       .then(notes => {
         this.setState({ notes })
       })
+
+    const loggedUserJSON = window.localStorage.getItem('loggedNoteappUser')
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      this.setState({ user })
+      noteService.setToken(user.token)
+    }    
   }
 
   toggleVisible = () => {
@@ -74,14 +81,16 @@ class App extends React.Component {
 
   login = async (event) => {
     event.preventDefault()
-    try{
+    try {
       const user = await loginService.login({
         username: this.state.username,
         password: this.state.password
       })
-  
-      this.setState({ username: '', password: '', user})
-    } catch(exception) {
+
+      window.localStorage.setItem('loggedNoteappUser', JSON.stringify(user))
+      noteService.setToken(user.token)
+      this.setState({ username: '', password: '', user })
+    } catch (exception) {
       this.setState({
         error: 'käyttäjätunnus tai salasana virheellinen',
       })
@@ -91,17 +100,12 @@ class App extends React.Component {
     }
   }
 
-  handleNoteChange = (e) => {
-    this.setState({ new_note: e.target.value })
+  handleNoteChange = (event) => {
+    this.setState({ newNote: event.target.value })
   }
 
   handleLoginFieldChange = (event) => {
     this.setState({ [event.target.name]: event.target.value })
-    /**if (event.target.name === 'password') {
-      this.setState({ password: event.target.value })
-    } else if (event.target.name === 'username') {
-      this.setState({ username: event.target.value })
-    }**/
   }
 
   toggleVisible = () => {
@@ -116,12 +120,8 @@ class App extends React.Component {
 
     const label = this.state.showAll ? 'vain tärkeät' : 'kaikki'
 
-    return (
+    const loginForm = () => (
       <div>
-        <h1>Muistiinpanot</h1>
-
-        <Notification message={this.state.error} />
-
         <h2>Kirjaudu</h2>
 
         <form onSubmit={this.login}>
@@ -131,7 +131,7 @@ class App extends React.Component {
               type="text"
               name="username"
               value={this.state.username}
-              onChange={this.handleUsernameChange}
+              onChange={this.handleLoginFieldChange}
             />
           </div>
           <div>
@@ -140,12 +140,16 @@ class App extends React.Component {
               type="password"
               name="password"
               value={this.state.password}
-              onChange={this.handlePasswordChange}
+              onChange={this.handleLoginFieldChange}
             />
           </div>
           <button>kirjaudu</button>
         </form>
+      </div>
+    )
 
+    const noteForm = () => (
+      <div>
         <h2>Luo uusi muistiinpano</h2>
 
         <form onSubmit={this.addNote}>
@@ -153,10 +157,25 @@ class App extends React.Component {
             value={this.state.newNote}
             onChange={this.handleNoteChange}
           />
-          <button type="submit">tallenna</button>
+          <button>tallenna</button>
         </form>
+      </div>
+    )
+
+    return (
+      <div>
+        <h1>Muistiinpanot</h1>
 
         <Notification message={this.state.error} />
+
+        {this.state.user === null ?
+          loginForm() :
+          <div>
+            <p>{this.state.user.name} logged in</p>
+            {noteForm()}
+          </div>
+        }
+
         <div>
           <button onClick={this.toggleVisible}>
             näytä {label}
