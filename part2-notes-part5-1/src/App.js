@@ -1,6 +1,9 @@
 import React from 'react'
 import Note from './components/Note'
 import Notification from './components/Notification'
+import Togglable from './components/Togglable'
+import LoginForm from './components/LoginForm'
+import NoteForm from './components/NoteForm'
 import noteService from './services/notes'
 import loginService from './services/login'
 
@@ -45,6 +48,8 @@ class App extends React.Component {
       important: Math.random() > 0.5
     }
 
+    this.noteForm.toggleVisibility()
+    
     noteService
       .create(noteObject)
       .then(newNote => {
@@ -121,45 +126,25 @@ class App extends React.Component {
     const label = this.state.showAll ? 'vain tärkeät' : 'kaikki'
 
     const loginForm = () => (
-      <div>
-        <h2>Kirjaudu</h2>
-
-        <form onSubmit={this.login}>
-          <div>
-            käyttäjätunnus
-            <input
-              type="text"
-              name="username"
-              value={this.state.username}
-              onChange={this.handleLoginFieldChange}
-            />
-          </div>
-          <div>
-            salasana
-            <input
-              type="password"
-              name="password"
-              value={this.state.password}
-              onChange={this.handleLoginFieldChange}
-            />
-          </div>
-          <button>kirjaudu</button>
-        </form>
-      </div>
+      <Togglable buttonLabel="login">
+        <LoginForm
+          visible={this.state.visible}
+          username={this.state.username}
+          password={this.state.password}
+          handleChange={this.handleLoginFieldChange}
+          handleSubmit={this.login}
+        />
+      </Togglable>
     )
 
     const noteForm = () => (
-      <div>
-        <h2>Luo uusi muistiinpano</h2>
-
-        <form onSubmit={this.addNote}>
-          <input
-            value={this.state.newNote}
-            onChange={this.handleNoteChange}
-          />
-          <button>tallenna</button>
-        </form>
-      </div>
+      <Togglable buttonLabel="new note" ref={component => this.noteForm = component}>
+        <NoteForm
+          onSubmit={this.addNote}
+          value={this.state.newNote}
+          handleChange={this.handleNoteChange}
+        />
+      </Togglable>
     )
 
     return (
