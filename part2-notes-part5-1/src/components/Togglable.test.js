@@ -1,5 +1,5 @@
 import React from 'react'
-import { shallow } from 'enzyme'
+import { shallow, mount } from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'
 import Note from './Note'
 import Togglable from './Togglable'
@@ -10,7 +10,7 @@ describe('<Togglable />', () => {
   beforeEach(() => {
     togglableComponent = shallow(
       <Togglable buttonLabel="show...">
-        <div className="testDiv" />
+        <div class="testDiv" />
       </Togglable>
     )
   })
@@ -32,4 +32,43 @@ describe('<Togglable />', () => {
     expect(div.getElement().props.style).toEqual({ display: '' })
   })
 
+  xit('shallow renders only one level', () => {
+    const note1 = {
+      content: 'Komponenttitestaus tapahtuu jestillä ja enzymellä',
+      important: true
+    }
+    const note2 = {
+      content: 'shallow ei renderöi alikomponentteja',
+      important: true
+    }
+
+    const togglableComponent = shallow(
+      <Togglable buttonLabel="show...">
+        <Note note={note1} />
+        <Note note={note2} />
+      </Togglable>
+    )
+
+    console.log(togglableComponent.debug())
+  })
+
+  xit('mount renders all components', () => {
+    const note1 = {
+      content: 'Komponenttitestaus tapahtuu jestillä ja enzymellä',
+      important: true
+    }
+    const note2 = {
+      content: 'mount renderöi myös alikomponentit',
+      important: true
+    }
+
+    const noteComponent = mount(
+      <Togglable buttonLabel="show...">
+        <Note note={note1} />
+        <Note note={note2} />
+      </Togglable>
+    )
+
+    console.log(noteComponent.debug())
+  })  
 })
