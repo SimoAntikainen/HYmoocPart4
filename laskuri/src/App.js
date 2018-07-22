@@ -17,14 +17,17 @@ const counterReducer = (state = 0, action) => {
 
 const store = createStore(counterReducer)
 
+store.subscribe(() => {
+  const storeNow = store.getState()
+  console.log(storeNow)
+})
+
 console.log(store.getState())
-store.dispatch({type: 'INCREMENT'})
-store.dispatch({type: 'INCREMENT'})
-store.dispatch({type: 'INCREMENT'})
-console.log(store.getState())
-store.dispatch({type: 'ZERO'})
-store.dispatch({type: 'DECREMENT'})
-console.log(store.getState())
+store.dispatch({ type: 'INCREMENT' })
+store.dispatch({ type: 'INCREMENT' })
+store.dispatch({ type: 'INCREMENT' })
+store.dispatch({ type: 'ZERO' })
+store.dispatch({ type: 'DECREMENT' })
 
 class App extends Component {
 
