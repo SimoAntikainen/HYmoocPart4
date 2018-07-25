@@ -1,7 +1,7 @@
 import noteReducer from './noteReducer'
 import deepFreeze from 'deep-freeze'
 
-describe('noteReducer', () => {
+describe('noteRenderer', () => {
   it('returns new state with action NEW_NOTE', () => {
     const state = []
     const action = {
@@ -32,27 +32,25 @@ describe('noteReducer', () => {
         important: false,
         id: 2
       }]
-  
+
     const action = {
       type: 'TOGGLE_IMPORTANCE',
       data: {
         id: 2
       }
     }
-  
+
     deepFreeze(state)
     const newState = noteReducer(state, action)
-  
+
     expect(newState.length).toBe(2)
-  
+
     expect(newState).toContainEqual(state[0])
-  
+
     expect(newState).toContainEqual({
       content: 'tilanmuutokset tehdään actioneilla',
       important: true,
       id: 2
     })
-  })
-
-  
+  })  
 })

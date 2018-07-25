@@ -1,6 +1,6 @@
 const generateId = () => Number((Math.random() * 1000000).toFixed(0))
 
-const actionFor = {
+export default {
   noteCreation(content) {
     return {
       type: 'NEW_NOTE',
@@ -18,5 +18,3 @@ const actionFor = {
     }
   }
 }
-
-export default actionFor

@@ -1,50 +1,16 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
-import {createStore} from 'redux'
+import React from 'react'
+import NoteForm from './components/NoteForm'
+import NoteList from './components/NoteList'
 
-const counterReducer = (state = 0, action) => {
-  switch (action.type) {
-    case 'INCREMENT':
-      return state + 1
-    case 'DECREMENT':
-      return state - 1
-    case 'ZERO':
-      return 0
-  }
-  return state
-}
-
-const store = createStore(counterReducer)
-
-store.subscribe(() => {
-  const storeNow = store.getState()
-  console.log(storeNow)
-})
-
-console.log(store.getState())
-store.dispatch({ type: 'INCREMENT' })
-store.dispatch({ type: 'INCREMENT' })
-store.dispatch({ type: 'INCREMENT' })
-store.dispatch({ type: 'ZERO' })
-store.dispatch({ type: 'DECREMENT' })
-
-class App extends Component {
-
-  
+class App extends React.Component {
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+      <div>
+        <NoteForm />
+        <NoteList />
       </div>
-    );
+    )
   }
 }
 
-export default App;
+export default App
