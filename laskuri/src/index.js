@@ -1,49 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import {createStore} from 'redux'
+import noteReducer from './noteReducer'
+import actionFor from './actions'
 
-/**const counterReducer = (state = 0, action) => {
-  switch (action.type) {
-    case 'INCREMENT':
-      return state + 1
-    case 'DECREMENT':
-      return state - 1
-    case 'ZERO':
-      return 0
-  }
-  return state
-}
-
-const store = createStore(counterReducer)
-
-class App extends React.Component {
-  render() {
-    return(
-      <div>
-        <div>
-          {store.getState()}
-        </div>
-        <button onClick={e => store.dispatch({ type: 'INCREMENT'})}>
-          plus
-        </button>
-        <button onClick={e => store.dispatch({ type: 'DECREMENT' })}>
-          minus
-        </button>
-        <button onClick={e => store.dispatch({ type: 'ZERO' })}>
-          zero
-        </button>
-      </div>
-    )
-  }
-}**/
-
-const noteReducer = (state = [], action) => {
-  if (action.type === 'NEW_NOTE') {
-    return state.concat(action.data)
-  }
-
-  return state
-}
 
 const store = createStore(noteReducer)
 
@@ -65,13 +25,52 @@ store.dispatch({
   }
 })
 
+const generateId = () => Number((Math.random() * 1000000).toFixed(0))
+
 class App extends React.Component {
+  addNote = (event) => {
+    event.preventDefault()
+    store.dispatch(
+      actionFor.noteCreation(event.target.note.value)
+    )
+    event.target.note.value = ''
+  }
+  toggleImportance = (id) => () => {
+    store.dispatch(
+      actionFor.importanceToggling(id)
+    )
+  }
+  /**addNote = (event) => {
+    event.preventDefault()
+    const content = event.target.note.value
+    store.dispatch({
+      type: 'NEW_NOTE',
+      data: {
+        content: content,
+        important: false,
+        id: generateId()
+      }
+    })
+    event.target.note.value = ''
+  }
+  toggleImportance = (id) => () => {
+    store.dispatch({
+      type: 'TOGGLE_IMPORTANCE',
+      data: { id }
+    })
+  }**/
+
+
   render() {
     return(
       <div>
+        <form onSubmit={this.addNote}>
+          <input name="note" />
+          <button type="submit">lisää</button>
+        </form>
         <ul>
           {store.getState().map(note=>
-            <li key={note.id}>
+            <li key={note.id} onClick={this.toggleImportance(note.id)}>
               {note.content} <strong>{note.important ? 'tärkeä' : ''}</strong>
             </li>
           )}
